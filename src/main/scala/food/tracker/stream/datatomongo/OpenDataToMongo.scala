@@ -20,6 +20,6 @@ object OpenDataToMongo extends App {
     .via(CsvFlow.flow)
     .map(writePretty(_))
     .runWith(MongoFoodSink.sink)
-    .recover(_.printStackTrace())
-    .andThen(_ => system.terminate())
+    .recover { case e => e.printStackTrace() }
+    .andThen { case _ => system.terminate() }
 }
